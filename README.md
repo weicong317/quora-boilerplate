@@ -27,5 +27,4 @@ quora-boilerplate
 
 ### Getting Started
 1. Run ```bundle install``` to install all gem dependencies
-2. Start the server by running ```shotgun config/init.rb```
-
+2. Start the server by running ```shotgun app.rb```
