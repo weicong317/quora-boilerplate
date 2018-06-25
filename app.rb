@@ -1,6 +1,6 @@
 require_relative './config/init.rb'
 
 get '/' do
-  "Hello world!"
+  @name = "Bob Smith"
   erb :"home"
 end
