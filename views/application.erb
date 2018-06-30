@@ -9,6 +9,15 @@
     <link rel="stylesheet" type="text/css" href="css/application.css">
   </head>
   <body>
+    <% if logged_in? %>
+      <a href = "/<%= @current_user.name %>">Profile Page</a>
+      <br>
+      <a href = "/">Home Page</a>
+      <br>
+      <form method = "post" action = "/logout">
+        <input type = submit value = "Logout">
+      </form>
+    <% end %>
 
     <%= yield %>
 

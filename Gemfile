@@ -4,6 +4,8 @@ gem 'sinatra'
 
 gem 'sinatra-contrib'
 
+gem "sinatra-flash"
+
 gem 'byebug'
 
 gem 'bcrypt'

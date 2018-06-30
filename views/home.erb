@@ -1,2 +1,40 @@
-<h1>Quora Clone</h1>
-<%= "Welcome #{@name}!" %>
+<% if logged_in? === false %>
+	<h2>Sign up for an account!</h2>
+	<form method = "post" action = "/">
+		<input type = text placeholder = "Name" name ="user[name]"><br>
+		<input type = text placeholder = "Email" name = "user[email]"><br>
+		<input type = password placeholder = "Password" name = "user[password]"><br>
+		<input type = password placeholder = "Password Confirm" name = "user[password_confirmation]"><br>
+		<input type = submit value = "Sign up">
+	</form>
+
+	<% if @errors %>
+		<% @errors.each do |key, value| %>
+			<%= "#{key}: #{value}" %>
+			<br> 
+		<% end %>
+	<% end %>
+
+	<% if flash[:notice_signup] %>
+	   	<%= flash[:notice_signup] %>
+	<% end %> 
+
+	<hr>
+
+	<h2>Login</h2>
+	<form method = "post" action = "/user">
+		<input type = text placeholder = "Email" name = "user[email]"><br>
+		<input type = password placeholder = "Password" name = "user[password]"><br>
+		<input type = submit value = "Login">
+	</form>
+
+	<% if flash[:notice_login] %>
+	   	<%= flash[:notice_login] %>
+	<% end %>
+<% else %>
+	<p>10 latest questions:</p>
+	<% x = Question.all.order("id DESC").take(10) %>
+	<% x.each_with_index do |row, number| %>
+		<p><%= number + 1 %>: <a href = "/posts/<%= "#{row.id}" %>"><%= row.description %></a></p>
+	<% end %>
+<% end %>

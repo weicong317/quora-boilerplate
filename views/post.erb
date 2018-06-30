@@ -1,0 +1,75 @@
+<p>Question: <%= @post_description %></p>
+<p>Updated at: <%= @post_when %></p>
+<% voteCount = Questionvote.where(question_id: @post_id).count %>
+<% if voteCount > 0 %>
+	<p>Number of vote: <%= voteCount %>
+<% end %>
+<% if Questionvote.find_by(question_id: @post_id, user_id: current_user.id) === nil %>
+	<form method = "post" action = "/posts/<%= @post_id %>/vote">
+		<input type = submit value = "Vote">
+	</form>
+<% end %>
+<% if Questionvote.find_by(question_id: @post_id, user_id: current_user.id) %>
+	<form method = "post" action = "/posts/<%= @post_id %>/vote/delete">
+		<input name = "_method" type = "hidden" value = "delete">
+		<input type = submit value = "Remove Vote">
+	</form>
+<% end %>
+
+<p>Answers:</p>
+<% x = Question.find(@post_id).answers %>
+<% x.each_with_index do |row, number| %>
+	<p><%= number + 1 %>: <%= row.reply %></p>
+	<% ansVoteCount = Answervote.where(answer_id: row.id).count %>
+	<% if ansVoteCount > 0 %>
+		<p>Number of vote: <%= ansVoteCount %>
+	<% end %>
+	<% if Answervote.find_by(answer_id: row.id, user_id: current_user.id) === nil %>
+		<form method = "post" action = "/posts/<%= @post_id %>/reply/<%= row.id %>/vote">
+			<input type = submit value = "Vote">
+		</form>
+	<% end %>
+	<% if Answervote.find_by(answer_id: row.id, user_id: current_user.id) %>
+		<form method = "post" action = "/posts/<%= @post_id %>/reply/<%= row.id %>/vote/delete">
+			<input name = "_method" type = "hidden" value = "delete">
+			<input type = submit value = "Remove Vote">
+		</form>
+	<% end %>
+	<% if row.user_id === current_user.id %>
+		<p>Update Your answer:</p>
+		<textarea rows = "2" cols = "50" name = "replyNew" form = "<%= row.id %>"></textarea>
+		<form method = "post" action = "/posts/<%= @post_id %>/reply/<%= row.id %>" id = "<%= row.id %>">
+			<input name = "_method" type = "hidden" value = "put">
+			<input type = submit value = "Update">
+		</form>
+
+		<form method = "post" action = "/posts/<%= @post_id %>/reply/<%= row.id %>/delete">
+			<input name = "_method" type = "hidden" value = "delete">
+			<input type = submit value = "Delete">
+		</form>
+	<% end %>
+<% end %>
+
+<hr>
+
+<p>Leave your answer:</p>
+<textarea rows = "4" cols = "50" name = "reply" form = "answerForm"></textarea>
+<form method = "post" action = "/posts/<%= @post_id %>/reply" id = "answerForm">
+	<input type = submit value = "Submit">
+</form>
+
+<hr>
+
+<% if @post_user_id === current_user.id %>
+	<p>Update Your question:</p>
+	<textarea rows = "4" cols = "50" name = "question_ask" form = "updateForm"></textarea>
+	<form method = "post" action = "/posts/<%= @post_id %>" id = "updateForm">
+		<input name = "_method" type = "hidden" value = "put">
+		<input type = submit value = "Update">
+	</form>
+
+	<form method = "post" action = "/posts/<%= @post_id %>/delete">
+		<input name = "_method" type = "hidden" value = "delete">
+		<input type = submit value = "Delete">
+	</form>
+<% end %>

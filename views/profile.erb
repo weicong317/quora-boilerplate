@@ -1,0 +1,40 @@
+<% if logged_in? && @current_user.id === @user.id %>
+    <h2>Welcome <%= @user.name %></h2>
+    <br>
+    <textarea rows = "4" cols = "50" name = "question_ask" form = "postForm"></textarea>
+    <form method = "post" action = "/posts/new" id = "postForm">
+    	<input type = submit value = "POST">
+    </form>
+    <br>
+    <% temp_array = [] %>
+    <% questionVoteCount = Questionvote.group(:question_id).count %>
+    <% questionVoteCount = questionVoteCount.sort_by {|k,v| v}.reverse %>
+    <% questions = Question.where(user_id: @current_user.id) %>
+    <% questions.each do |row| %>
+    	<% temp_array << row.id %>
+    <% end %>
+    <% questionVoteCount.each do |key, value| %>
+    	<% if temp_array.include?(key) %>
+    		<% question = Question.find(key).description %>
+    		<p>Top vote question:</p>
+    		<p><a href = "/posts/<%= "#{key}" %>"><%= question %></a></p>
+    		<% break %>
+    	<% end %>
+    <% end %>
+    <br>
+    <p>Question Asked:</p>
+  	<% x = User.find(@current_user.id).questions.order("id DESC") %>
+  	<% x.each_with_index do |row, number| %>
+   		<p><%= number + 1 %>: <a href = "/posts/<%= "#{row.id}" %>"><%= row.description %></a></p>
+	<% end %>
+	<br>
+	<p>Answer Posted:</p>
+	<% x = User.find(@current_user.id).answers.order(:id) %>
+	<% x.each_with_index do |row, number| %>
+		<p><%= number + 1 %>: <a href = "/posts/<%= "#{row.question_id}" %>"><%= row.reply %></a></p>
+	<% end %>
+<% elsif logged_in? === false %>
+	<h2>Are you login?</h2>
+<% else %>
+	<h2>You are not allowed to see other's profile</h2>
+<% end %>
