@@ -2,6 +2,8 @@
 
 This is a boilerplate app for quora-clone. It will be used to build quora-clone  and help you learn web server fundamentals such as HTTP(GET/POST), RESTful Routes, Cookies and the MVC Framework.
 
+=> this is run on sinatra
+
 ### Folder Structure
 The directory structure emulates Rails MVC Framework using Sinatra.
 ```
